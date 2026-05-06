@@ -120,14 +120,19 @@ namespace Discord_Event_time
                 DateTime utcDateTime = localDateTime.ToUniversalTime();
                 long unixTimestamp = ((DateTimeOffset)utcDateTime).ToUnixTimeSeconds();
 
+                // Show GMT/Zulu time at the start
+                string gmtTime = utcDateTime.ToString("d MMM yyyy HH:mm");
+                string prefix = $"GMT/Zulu: {gmtTime} your time is ";
+
                 string timeFormat = chkFull.Checked ? "f" : "t";  // :f for full, :t for short time
                 string formatted = $"<t:{unixTimestamp}:{timeFormat}>";
-                string relative = $"<t:{unixTimestamp}:R>";
 
                 var parts = new System.Collections.Generic.List<string>();
                 parts.Add(formatted);
-                if (chkRelative.Checked) parts.Add(relative);
-                outputBox.Text = string.Join(" ", parts);
+                if (chkRelative.Checked) parts.Add($"<t:{unixTimestamp}:R>");
+                
+                string output = prefix + string.Join(" ", parts);
+                outputBox.Text = output;
             }
             catch (Exception ex)
             {
