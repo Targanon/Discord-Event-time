@@ -6,3 +6,4 @@
 - For the PWA UI, prefer a scrollable selector-style date/time input instead of the browser datetime-local picker because the current dropdown blocks the Generate button and is hard to use. The first implementation of the scrollable selector failed at runtime and should be replaced with a more robust approach.
 - Use the web app title/branding 'Targs Discord Local Time Generator'.
 - Use a dark-only theme for the web app.
+- Ensure the web app scales better across platforms and reduce the overall UI size significantly, especially for mobile, by approximately 50%.

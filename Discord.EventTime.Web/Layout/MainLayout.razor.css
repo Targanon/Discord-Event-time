@@ -9,62 +9,60 @@
 }
 
 .app-header {
-    padding: 2rem 1rem 1rem;
+    padding: 1.15rem 0.85rem 0.5rem;
     text-align: center;
 }
 
 .header-content {
-    max-width: 40rem;
+    max-width: 28rem;
     margin: 0 auto;
 }
 
     .header-content h1 {
         margin: 0;
-        font-size: 2rem;
+        font-size: clamp(1.3rem, 4vw, 1.8rem);
         font-weight: 700;
+        line-height: 1.1;
     }
 
     .header-content p {
-        margin: 0.75rem 0 0;
+        margin: 0.45rem 0 0;
         color: #d7dbff;
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 
 .app-version {
     display: inline-block;
-    margin-top: 0.75rem;
-    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    font-size: 0.78rem;
     color: #c5ccff;
 }
 
 .app-main {
-    max-width: 40rem;
+    max-width: 30rem;
     margin: 0 auto;
-    padding: 1rem 1rem 2rem;
+    padding: 0.6rem 0.85rem 1.25rem;
 }
 
 .app-footer {
-    padding: 0 1rem 2rem;
+    padding: 0 0.85rem 1.25rem;
     text-align: center;
     color: #d7dbff;
 }
 
 .app-footer p {
     margin: 0;
-    font-size: 0.95rem;
+    font-size: 0.8rem;
 }
 
 @media (min-width: 768px) {
     .app-header {
-        padding-top: 3rem;
-    }
-
-    .header-content h1 {
-        font-size: 2.5rem;
+        padding-top: 1.75rem;
     }
 
     .app-main {
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
+        max-width: 34rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 }
