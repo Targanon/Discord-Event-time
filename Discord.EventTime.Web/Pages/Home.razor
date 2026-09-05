@@ -17,20 +17,38 @@
         <span class="version-badge">@($"v{CurrentVersion}")</span>
     </div>
 
-    <div class="preview-grid" aria-label="Selected time preview">
-        <article class="preview-panel">
-            <span class="preview-label">Your local time</span>
-            <strong>@LocalPreview</strong>
-        </article>
-        <article class="preview-panel">
-            <span class="preview-label">GMT/Zulu</span>
-            <strong>@UtcPreview</strong>
-        </article>
+    <div class="desktop-only">
+        <div class="preview-grid" aria-label="Selected time preview">
+            <article class="preview-panel">
+                <span class="preview-label">Your local time</span>
+                <strong>@LocalPreview</strong>
+            </article>
+            <article class="preview-panel">
+                <span class="preview-label">GMT/Zulu</span>
+                <strong>@UtcPreview</strong>
+            </article>
+        </div>
+        <p class="preview-caption">Pick the local date and time, then generate the Discord-ready text when you are happy with it.</p>
     </div>
 
-    <p class="preview-caption">Pick the local date and time, then generate the Discord-ready text when you are happy with it.</p>
+    <details class="section-block mobile-only mobile-details">
+        <summary>Selected time preview</summary>
+        <div class="mobile-details-body">
+            <div class="preview-grid" aria-label="Selected time preview">
+                <article class="preview-panel">
+                    <span class="preview-label">Your local time</span>
+                    <strong>@LocalPreview</strong>
+                </article>
+                <article class="preview-panel">
+                    <span class="preview-label">GMT/Zulu</span>
+                    <strong>@UtcPreview</strong>
+                </article>
+            </div>
+            <p class="preview-caption">Pick the local date and time, then generate the Discord-ready text when you are happy with it.</p>
+        </div>
+    </details>
 
-    <div class="section-block how-to-block">
+    <div class="section-block how-to-block desktop-only">
         <h2 class="section-heading">Quick how to</h2>
         <ol class="how-to-list">
             <li>Pick the date and time using the scrollable selectors.</li>
@@ -39,6 +57,18 @@
         </ol>
         <p class="how-to-example">Discord will turn code like <code>&lt;t:1767627960:f&gt;</code> into a readable local time for each person viewing it.</p>
     </div>
+
+    <details class="section-block how-to-block mobile-only mobile-details">
+        <summary>Quick how to</summary>
+        <div class="mobile-details-body">
+            <ol class="how-to-list">
+                <li>Pick the date and time using the scrollable selectors.</li>
+                <li>Click <strong>Generate timestamp</strong>.</li>
+                <li>Copy the generated code and paste it into Discord.</li>
+            </ol>
+            <p class="how-to-example">Discord will turn code like <code>&lt;t:1767627960:f&gt;</code> into a readable local time for each person viewing it.</p>
+        </div>
+    </details>
 
     <div class="section-block">
         <div class="section-heading-row">
@@ -135,15 +165,22 @@
         <button class="primary-button" type="button" @onclick="GenerateOutput">Generate timestamp</button>
     </div>
 
-    <div class="section-block">
-        <label class="section-heading" for="output">Generated output</label>
-        <p class="output-hint">Click Generate timestamp, then copy the code below into Discord.</p>
-        <textarea id="output" class="form-input output-box" readonly value="@generatedOutput" placeholder="Your Discord timestamp code will appear here after you click Generate timestamp."></textarea>
-    </div>
+    @if (HasGeneratedOutput)
+    {
+        <div class="button-row button-row-split output-actions">
+            <button class="secondary-button" type="button" @onclick="ToggleOutputPanel">@(showGeneratedOutputPanel ? "Hide code" : "Show code")</button>
+            <button class="primary-button" type="button" @onclick="CopyOutputAsync">Copy</button>
+        </div>
 
-    <div class="button-row button-row-split">
-        <button class="secondary-button" type="button" @onclick="CopyOutputAsync" disabled="@string.IsNullOrWhiteSpace(generatedOutput)">Copy</button>
-    </div>
+        @if (showGeneratedOutputPanel)
+        {
+            <div class="section-block output-panel">
+                <label class="section-heading" for="output">Generated output</label>
+                <p class="output-hint">Click Generate timestamp, then copy the code below into Discord.</p>
+                <textarea id="output" class="form-input output-box" readonly value="@generatedOutput" placeholder="Your Discord timestamp code will appear here after you click Generate timestamp."></textarea>
+            </div>
+        }
+    }
 
     @if (!string.IsNullOrWhiteSpace(statusMessage))
     {
@@ -169,6 +206,7 @@
     private bool includeRelativeTime = true;
     private string generatedOutput = string.Empty;
     private string statusMessage = string.Empty;
+    private bool showGeneratedOutputPanel;
 
     private IEnumerable<int> dayOptions => Enumerable.Range(1, DateTime.DaysInMonth(selectedYear, selectedMonth));
 
@@ -198,7 +236,7 @@
 
         if (hadGeneratedOutput)
         {
-            GenerateOutput("Timestamp updated to the current local time.");
+            GenerateOutput("Timestamp updated to the current local time.", showGeneratedOutputPanel);
             return;
         }
 
@@ -301,6 +339,11 @@
         return isSelected ? "selector-button selector-button-selected" : "selector-button";
     }
 
+    private void ToggleOutputPanel()
+    {
+        showGeneratedOutputPanel = !showGeneratedOutputPanel;
+    }
+
     private bool HasGeneratedOutput => !string.IsNullOrWhiteSpace(generatedOutput);
 
     private void RefreshGeneratedOutputIfPresent()
@@ -310,7 +353,7 @@
             return;
         }
 
-        GenerateOutput("Timestamp updated.");
+        GenerateOutput("Timestamp updated.", showGeneratedOutputPanel);
     }
 
     private string BuildGeneratedOutput()
@@ -336,12 +379,13 @@
 
     private void GenerateOutput()
     {
-        GenerateOutput("Timestamp generated.");
+        GenerateOutput("Timestamp generated.", true);
     }
 
-    private void GenerateOutput(string successMessage)
+    private void GenerateOutput(string successMessage, bool revealPanel)
     {
         generatedOutput = BuildGeneratedOutput();
+        showGeneratedOutputPanel = revealPanel;
         statusMessage = successMessage;
     }
 
