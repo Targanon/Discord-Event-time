@@ -37,6 +37,8 @@ jobs:
       - name: Configure Pages
         id: pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Publish Blazor WebAssembly app
         run: dotnet publish $PROJECT_PATH -c Release -o $PUBLISH_PATH
