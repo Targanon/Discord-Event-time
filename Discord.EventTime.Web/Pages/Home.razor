@@ -3,17 +3,18 @@
 @using Microsoft.JSInterop
 @inject IJSRuntime JS
 
-<PageTitle>Discord Event Time</PageTitle>
+<PageTitle>Targs Discord Local Time Generator</PageTitle>
 
 <section class="home-card">
     <div class="hero-row">
         <div>
-            <h1>Discord Event Time</h1>
+            <h1>Targs Discord Local Time Generator</h1>
             <p class="intro">
-                Generate Discord timestamp markup in the browser and copy it straight into chat.
+                Generate Discord timestamp markup in the browser, then paste it straight into chat.
             </p>
+            <p class="byline">Made by Targanon for quick Discord event sharing.</p>
         </div>
-        <span class="version-badge">v@CurrentVersion</span>
+        <span class="version-badge">@($"v{CurrentVersion}")</span>
     </div>
 
     <div class="preview-grid" aria-label="Selected time preview">
@@ -28,6 +29,16 @@
     </div>
 
     <p class="preview-caption">Pick the local date and time, then generate the Discord-ready text when you are happy with it.</p>
+
+    <div class="section-block how-to-block">
+        <h2 class="section-heading">Quick how to</h2>
+        <ol class="how-to-list">
+            <li>Pick the date and time using the scrollable selectors.</li>
+            <li>Click <strong>Generate timestamp</strong>.</li>
+            <li>Copy the generated code and paste it into Discord.</li>
+        </ol>
+        <p class="how-to-example">Discord will turn code like <code>&lt;t:1767627960:f&gt;</code> into a readable local time for each person viewing it.</p>
+    </div>
 
     <div class="section-block">
         <div class="section-heading-row">
@@ -126,8 +137,8 @@
 
     <div class="section-block">
         <label class="section-heading" for="output">Generated output</label>
-        <p class="output-hint">The output matches the desktop app format and is ready to paste into Discord.</p>
-        <textarea id="output" class="form-input output-box" readonly>@generatedOutput</textarea>
+        <p class="output-hint">Click Generate timestamp, then copy the code below into Discord.</p>
+        <textarea id="output" class="form-input output-box" readonly value="@generatedOutput" placeholder="Your Discord timestamp code will appear here after you click Generate timestamp."></textarea>
     </div>
 
     <div class="button-row button-row-split">

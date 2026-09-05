@@ -1,6 +1,6 @@
 .home-card {
-    background: rgba(255, 255, 255, 0.98);
-    color: #1e1f22;
+    background: rgba(24, 26, 34, 0.98);
+    color: #f4f6ff;
     border-radius: 1.5rem;
     padding: 1.25rem;
     box-shadow: 0 1.25rem 2.5rem rgba(15, 23, 42, 0.25);
@@ -22,15 +22,21 @@
 
 .intro {
     margin: 0.6rem 0 0;
-    color: #4f5660;
+    color: #d7dbff;
+}
+
+.byline {
+    margin: 0.45rem 0 0;
+    color: #aeb7d6;
+    font-size: 0.95rem;
 }
 
 .version-badge {
     flex-shrink: 0;
     padding: 0.35rem 0.75rem;
     border-radius: 999px;
-    background: #eef1ff;
-    color: #39418c;
+    background: #2b3272;
+    color: #eef1ff;
     font-size: 0.9rem;
     font-weight: 700;
 }
@@ -44,15 +50,41 @@
 
 .preview-caption {
     margin: 0 0 1rem;
-    color: #d7dbff;
+    color: #c5ccff;
     text-align: center;
+}
+
+.how-to-block {
+    margin-bottom: 1rem;
+}
+
+.how-to-list {
+    margin: 0.75rem 0 0;
+    padding-left: 1.25rem;
+    color: #dfe4ff;
+}
+
+.how-to-list li + li {
+    margin-top: 0.35rem;
+}
+
+.how-to-example {
+    margin: 0.85rem 0 0;
+    color: #b6bedb;
+}
+
+.how-to-example code {
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.4rem;
+    background: #2b3272;
+    color: #f4f6ff;
 }
 
 .preview-panel,
 .section-block {
-    border: 1px solid #e4e7ef;
+    border: 1px solid #3f4658;
     border-radius: 1rem;
-    background: #f8f9fd;
+    background: #232733;
 }
 
 .preview-panel {
@@ -62,7 +94,7 @@
 .preview-label {
     display: block;
     margin-bottom: 0.35rem;
-    color: #5f6775;
+    color: #aeb7d6;
     font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -105,7 +137,7 @@
 .selector-column h2 {
     margin: 0 0 0.55rem;
     font-size: 0.95rem;
-    color: #4f5660;
+    color: #d7dbff;
 }
 
 .selector-list {
@@ -119,16 +151,17 @@
 
 .selector-button {
     min-height: 2.6rem;
-    border: 1px solid #ccd3e0;
+    border: 1px solid #4d566d;
     border-radius: 0.85rem;
-    background: white;
-    color: #1e1f22;
+    background: #161922;
+    color: #f4f6ff;
     font-weight: 600;
     transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
 .selector-button:hover {
     border-color: #8f98ff;
+    background: #202534;
     transform: translateY(-1px);
 }
 
@@ -143,11 +176,12 @@
     width: 100%;
     min-height: 2.75rem;
     padding: 0.75rem;
-    border: 1px solid #cfd4dc;
+    border: 1px solid #4d566d;
     border-radius: 0.75rem;
     font-size: 1rem;
     box-sizing: border-box;
-    background: white;
+    background: #161922;
+    color: #f4f6ff;
 }
 
 .form-options {
@@ -189,8 +223,8 @@
 }
 
 .secondary-button {
-    background: #e9ecff;
-    color: #2b3272;
+    background: #2b3272;
+    color: #f4f6ff;
 }
 
 .primary-button:disabled,
@@ -206,14 +240,18 @@
     font-family: Consolas, 'Courier New', monospace;
 }
 
+.output-box::placeholder {
+    color: #aeb7d6;
+}
+
 .output-hint {
     margin: 0.35rem 0 0.85rem;
-    color: #5f6775;
+    color: #b6bedb;
 }
 
 .status-message {
     margin: 0;
-    color: #2b3272;
+    color: #d7dbff;
     font-weight: 700;
 }
 
