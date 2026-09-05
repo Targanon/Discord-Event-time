@@ -4,10 +4,20 @@ on:
   push:
     branches:
       - main
+      - master
       - feature/pwa
     paths:
       - 'Discord.EventTime.Web/**'
       - '.github/workflows/deploy-web-to-github-pages.yml'
+      - 'scripts/Prepare-GitHubPages.ps1'
+  pull_request:
+    branches:
+      - main
+      - master
+    paths:
+      - 'Discord.EventTime.Web/**'
+      - '.github/workflows/deploy-web-to-github-pages.yml'
+      - 'scripts/Prepare-GitHubPages.ps1'
   workflow_dispatch:
 
 permissions:
@@ -53,6 +63,7 @@ jobs:
           path: out/publish/wwwroot
 
   deploy:
+    if: github.event_name != 'pull_request' && (github.ref_name == 'main' || github.ref_name == 'master')
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
