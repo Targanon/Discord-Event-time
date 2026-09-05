@@ -1,0 +1,62 @@
+name: Deploy Discord Event Time Web to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - feature/pwa
+    paths:
+      - 'Discord.EventTime.Web/**'
+      - '.github/workflows/deploy-web-to-github-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PROJECT_PATH: Discord.EventTime.Web/Discord.EventTime.Web.csproj
+      PUBLISH_PATH: out/publish
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Publish Blazor WebAssembly app
+        run: dotnet publish $PROJECT_PATH -c Release -o $PUBLISH_PATH
+
+      - name: Prepare GitHub Pages artifact
+        shell: pwsh
+        run: pwsh -NoProfile -File ./scripts/Prepare-GitHubPages.ps1 -PublishPath $env:PUBLISH_PATH -RepositoryName '${{ github.event.repository.name }}'
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out/publish/wwwroot
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
