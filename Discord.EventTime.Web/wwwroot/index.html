@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="application-name" content="Discord Event Time" />
+    <meta name="apple-mobile-web-app-title" content="Discord Event Time" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>Discord Event Time</title>
+    <base href="/" />
+    <link rel="preload" id="webassembly" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link href="Discord.EventTime.Web.styles.css" rel="stylesheet" />
+    <link href="manifest.webmanifest" rel="manifest" />
+    <meta name="description" content="Generate Discord timestamp markup from your local date and time." />
+    <meta name="theme-color" content="#5865f2" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+    <script type="importmap"></script>
+</head>
+
+<body>
+    <div id="app">
+        <svg class="loading-progress">
+            <circle r="40%" cx="50%" cy="50%" />
+            <circle r="40%" cx="50%" cy="50%" />
+        </svg>
+        <div class="loading-progress-text"></div>
+    </div>
+
+    <div id="blazor-error-ui">
+        The web app hit a problem.
+        <a href="." class="reload">Reload</a>
+        <span class="dismiss">🗙</span>
+    </div>
+    <script>
+        window.discordEventTime = {
+            copyText: async function (text) {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(text);
+                    return;
+                }
+
+                var textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.setAttribute('readonly', 'readonly');
+                textArea.style.position = 'fixed';
+                textArea.style.opacity = '0';
+                textArea.style.pointerEvents = 'none';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+
+                var copied = document.execCommand('copy');
+                document.body.removeChild(textArea);
+
+                if (!copied) {
+                    throw new Error('Clipboard copy failed.');
+                }
+            }
+        };
+    </script>
+    <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
+    <script>
+        window.addEventListener('load', function () {
+            if (!('serviceWorker' in navigator)) {
+                return;
+            }
+
+            navigator.serviceWorker.register('service-worker.js');
+        });
+    </script>
+</body>
+
+</html>

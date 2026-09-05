@@ -1,0 +1,70 @@
+.page {
+    min-height: 100vh;
+}
+
+.app-shell {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #5865f2 0%, #1e1f22 100%);
+    color: white;
+}
+
+.app-header {
+    padding: 2rem 1rem 1rem;
+    text-align: center;
+}
+
+.header-content {
+    max-width: 40rem;
+    margin: 0 auto;
+}
+
+    .header-content h1 {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .header-content p {
+        margin: 0.75rem 0 0;
+        color: #d7dbff;
+        font-size: 1rem;
+    }
+
+.app-version {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    color: #c5ccff;
+}
+
+.app-main {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 1rem 1rem 2rem;
+}
+
+.app-footer {
+    padding: 0 1rem 2rem;
+    text-align: center;
+    color: #d7dbff;
+}
+
+.app-footer p {
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+@media (min-width: 768px) {
+    .app-header {
+        padding-top: 3rem;
+    }
+
+    .header-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .app-main {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "Discord Event Time",
+  "short_name": "Event Time",
+  "lang": "en-US",
+  "id": "./",
+  "scope": "./",
+  "start_url": "./",
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "display": "standalone",
+  "description": "Generate Discord timestamp markup from your local date and time.",
+  "orientation": "portrait-primary",
+  "background_color": "#1e1f22",
+  "theme_color": "#5865f2",
+  "categories": ["productivity", "utilities"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    }
+  ]
+}

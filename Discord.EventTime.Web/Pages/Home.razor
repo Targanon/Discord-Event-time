@@ -1,0 +1,355 @@
+@page "/"
+@using System.Globalization
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
+<PageTitle>Discord Event Time</PageTitle>
+
+<section class="home-card">
+    <div class="hero-row">
+        <div>
+            <h1>Discord Event Time</h1>
+            <p class="intro">
+                Generate Discord timestamp markup in the browser and copy it straight into chat.
+            </p>
+        </div>
+        <span class="version-badge">v@CurrentVersion</span>
+    </div>
+
+    <div class="preview-grid" aria-label="Selected time preview">
+        <article class="preview-panel">
+            <span class="preview-label">Your local time</span>
+            <strong>@LocalPreview</strong>
+        </article>
+        <article class="preview-panel">
+            <span class="preview-label">GMT/Zulu</span>
+            <strong>@UtcPreview</strong>
+        </article>
+    </div>
+
+    <p class="preview-caption">Pick the local date and time, then generate the Discord-ready text when you are happy with it.</p>
+
+    <div class="section-block">
+        <div class="section-heading-row">
+            <label class="section-heading">Choose a date and time</label>
+            <button class="text-button" type="button" @onclick="ResetToNow">Use now</button>
+        </div>
+
+        <div class="selector-grid">
+            <section class="selector-column" aria-label="Year selector">
+                <h2>Year</h2>
+                <div class="selector-list">
+                    @foreach (var year in yearOptions)
+                    {
+                        <button type="button"
+                                class="@GetSelectorButtonClass(selectedYear == year)"
+                                @onclick="() => SelectYear(year)">
+                            @year
+                        </button>
+                    }
+                </div>
+            </section>
+
+            <section class="selector-column" aria-label="Month selector">
+                <h2>Month</h2>
+                <div class="selector-list">
+                    @foreach (var month in monthOptions)
+                    {
+                        <button type="button"
+                                class="@GetSelectorButtonClass(selectedMonth == month)"
+                                @onclick="() => SelectMonth(month)">
+                            @CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(month)
+                        </button>
+                    }
+                </div>
+            </section>
+
+            <section class="selector-column" aria-label="Day selector">
+                <h2>Day</h2>
+                <div class="selector-list">
+                    @foreach (var day in dayOptions)
+                    {
+                        <button type="button"
+                                class="@GetSelectorButtonClass(selectedDay == day)"
+                                @onclick="() => SelectDay(day)">
+                            @day.ToString(CultureInfo.InvariantCulture)
+                        </button>
+                    }
+                </div>
+            </section>
+
+            <section class="selector-column" aria-label="Hour selector">
+                <h2>Hour</h2>
+                <div class="selector-list">
+                    @foreach (var hour in hourOptions)
+                    {
+                        <button type="button"
+                                class="@GetSelectorButtonClass(selectedHour == hour)"
+                                @onclick="() => SelectHour(hour)">
+                            @hour.ToString("00", CultureInfo.InvariantCulture)
+                        </button>
+                    }
+                </div>
+            </section>
+
+            <section class="selector-column" aria-label="Minute selector">
+                <h2>Minute</h2>
+                <div class="selector-list">
+                    @foreach (var minute in minuteOptions)
+                    {
+                        <button type="button"
+                                class="@GetSelectorButtonClass(selectedMinute == minute)"
+                                @onclick="() => SelectMinute(minute)">
+                            @minute.ToString("00", CultureInfo.InvariantCulture)
+                        </button>
+                    }
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="section-block form-options" aria-label="Format options">
+        <label class="checkbox-row">
+            <input type="checkbox" checked="@useFullFormat" @onchange="OnUseFullFormatChanged" />
+            <span>Use Discord full date format</span>
+        </label>
+
+        <label class="checkbox-row">
+            <input type="checkbox" checked="@includeRelativeTime" @onchange="OnIncludeRelativeTimeChanged" />
+            <span>Include relative time</span>
+        </label>
+    </div>
+
+    <div class="button-row">
+        <button class="primary-button" type="button" @onclick="GenerateOutput">Generate timestamp</button>
+    </div>
+
+    <div class="section-block">
+        <label class="section-heading" for="output">Generated output</label>
+        <p class="output-hint">The output matches the desktop app format and is ready to paste into Discord.</p>
+        <textarea id="output" class="form-input output-box" readonly>@generatedOutput</textarea>
+    </div>
+
+    <div class="button-row button-row-split">
+        <button class="secondary-button" type="button" @onclick="CopyOutputAsync" disabled="@string.IsNullOrWhiteSpace(generatedOutput)">Copy</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(statusMessage))
+    {
+        <p class="status-message" role="status">@statusMessage</p>
+    }
+</section>
+
+@code {
+    private const string CurrentVersion = "1.7.0.0";
+    private static readonly DateTime InitialLocalTime = DateTime.Now;
+    private readonly List<int> yearOptions = Enumerable.Range(DateTime.Now.Year - 10, 31).ToList();
+    private readonly List<int> monthOptions = Enumerable.Range(1, 12).ToList();
+    private readonly List<int> hourOptions = Enumerable.Range(0, 24).ToList();
+    private readonly List<int> minuteOptions = Enumerable.Range(0, 60).ToList();
+
+    private DateTime selectedLocalTime = InitialLocalTime;
+    private int selectedYear = InitialLocalTime.Year;
+    private int selectedMonth = InitialLocalTime.Month;
+    private int selectedDay = InitialLocalTime.Day;
+    private int selectedHour = InitialLocalTime.Hour;
+    private int selectedMinute = InitialLocalTime.Minute;
+    private bool useFullFormat = true;
+    private bool includeRelativeTime = true;
+    private string generatedOutput = string.Empty;
+    private string statusMessage = string.Empty;
+
+    private IEnumerable<int> dayOptions => Enumerable.Range(1, DateTime.DaysInMonth(selectedYear, selectedMonth));
+
+    private string LocalPreview => selectedLocalTime.ToString("dddd, d MMM yyyy HH:mm", CultureInfo.CurrentCulture);
+
+    private string UtcPreview => selectedLocalTime
+        .ToUniversalTime()
+        .ToString("ddd, d MMM yyyy HH:mm 'UTC'", CultureInfo.InvariantCulture);
+
+    protected override void OnInitialized()
+    {
+        UpdateSelectedLocalTime();
+    }
+
+    private void ResetToNow()
+    {
+        var now = DateTime.Now;
+        var hadGeneratedOutput = HasGeneratedOutput;
+
+        selectedYear = now.Year;
+        selectedMonth = now.Month;
+        selectedDay = now.Day;
+        selectedHour = now.Hour;
+        selectedMinute = now.Minute;
+
+        UpdateSelectedLocalTime();
+
+        if (hadGeneratedOutput)
+        {
+            GenerateOutput("Timestamp updated to the current local time.");
+            return;
+        }
+
+        statusMessage = "Updated to the current local time.";
+    }
+
+    private void SelectYear(int year)
+    {
+        if (selectedYear == year)
+        {
+            return;
+        }
+
+        selectedYear = year;
+        UpdateSelectedLocalTime();
+        RefreshGeneratedOutputIfPresent();
+    }
+
+    private void SelectMonth(int month)
+    {
+        if (selectedMonth == month)
+        {
+            return;
+        }
+
+        selectedMonth = month;
+        UpdateSelectedLocalTime();
+        RefreshGeneratedOutputIfPresent();
+    }
+
+    private void SelectDay(int day)
+    {
+        if (selectedDay == day)
+        {
+            return;
+        }
+
+        selectedDay = day;
+        UpdateSelectedLocalTime();
+        RefreshGeneratedOutputIfPresent();
+    }
+
+    private void SelectHour(int hour)
+    {
+        if (selectedHour == hour)
+        {
+            return;
+        }
+
+        selectedHour = hour;
+        UpdateSelectedLocalTime();
+        RefreshGeneratedOutputIfPresent();
+    }
+
+    private void SelectMinute(int minute)
+    {
+        if (selectedMinute == minute)
+        {
+            return;
+        }
+
+        selectedMinute = minute;
+        UpdateSelectedLocalTime();
+        RefreshGeneratedOutputIfPresent();
+    }
+
+    private void UpdateSelectedLocalTime()
+    {
+        var maxDay = DateTime.DaysInMonth(selectedYear, selectedMonth);
+        if (selectedDay > maxDay)
+        {
+            selectedDay = maxDay;
+        }
+
+        selectedLocalTime = new DateTime(selectedYear, selectedMonth, selectedDay, selectedHour, selectedMinute, 0, DateTimeKind.Local);
+        statusMessage = string.Empty;
+    }
+
+    private void OnUseFullFormatChanged(ChangeEventArgs e)
+    {
+        useFullFormat = ReadBool(e);
+        RefreshGeneratedOutputIfPresent();
+    }
+
+    private void OnIncludeRelativeTimeChanged(ChangeEventArgs e)
+    {
+        includeRelativeTime = ReadBool(e);
+        RefreshGeneratedOutputIfPresent();
+    }
+
+    private static bool ReadBool(ChangeEventArgs e)
+    {
+        return e.Value is bool boolValue
+            ? boolValue
+            : string.Equals(Convert.ToString(e.Value, CultureInfo.InvariantCulture), "true", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string GetSelectorButtonClass(bool isSelected)
+    {
+        return isSelected ? "selector-button selector-button-selected" : "selector-button";
+    }
+
+    private bool HasGeneratedOutput => !string.IsNullOrWhiteSpace(generatedOutput);
+
+    private void RefreshGeneratedOutputIfPresent()
+    {
+        if (!HasGeneratedOutput)
+        {
+            return;
+        }
+
+        GenerateOutput("Timestamp updated.");
+    }
+
+    private string BuildGeneratedOutput()
+    {
+        var utcDateTime = selectedLocalTime.ToUniversalTime();
+        var unixTimestamp = new DateTimeOffset(utcDateTime).ToUnixTimeSeconds();
+        var gmtTime = utcDateTime.ToString("d MMM yyyy HH:mm", CultureInfo.InvariantCulture);
+        var prefix = $"GMT/Zulu: {gmtTime} your time is ";
+        var timeFormat = useFullFormat ? "f" : "t";
+
+        var parts = new List<string>
+        {
+            $"<t:{unixTimestamp}:{timeFormat}>"
+        };
+
+        if (includeRelativeTime)
+        {
+            parts.Add($"<t:{unixTimestamp}:R>");
+        }
+
+        return prefix + string.Join(" ", parts);
+    }
+
+    private void GenerateOutput()
+    {
+        GenerateOutput("Timestamp generated.");
+    }
+
+    private void GenerateOutput(string successMessage)
+    {
+        generatedOutput = BuildGeneratedOutput();
+        statusMessage = successMessage;
+    }
+
+    private async Task CopyOutputAsync()
+    {
+        if (!HasGeneratedOutput)
+        {
+            statusMessage = "Generate a timestamp before copying.";
+            return;
+        }
+
+        try
+        {
+            await JS.InvokeVoidAsync("discordEventTime.copyText", generatedOutput);
+            statusMessage = "Copied to clipboard.";
+        }
+        catch (JSException)
+        {
+            statusMessage = "Copy failed. Use the browser on a secure page and try again.";
+        }
+    }
+}
