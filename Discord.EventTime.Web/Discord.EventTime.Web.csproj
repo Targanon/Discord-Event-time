@@ -12,8 +12,8 @@
     <AssemblyVersion>1.7.0.0</AssemblyVersion>
     <FileVersion>1.7.0.0</FileVersion>
     <InformationalVersion>1.7.0.0</InformationalVersion>
-    <Product>Discord Event Time</Product>
-    <Description>Browser and PWA version of Discord Event Time for generating Discord timestamp markup.</Description>
+    <Product>Targs Discord Local Time Generator</Product>
+    <Description>Browser and PWA version of Targs Discord Local Time Generator for creating Discord local time codes.</Description>
   </PropertyGroup>
 
   <ItemGroup>
