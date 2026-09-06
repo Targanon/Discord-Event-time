@@ -9,4 +9,4 @@
 - Ensure the web app scales better across platforms and reduce the overall UI size significantly, especially for mobile, by approximately 50%.
 - Maintain responsive behavior split by screen size: keep the compact desktop scaling, but implement a different, better mobile layout instead of the current tall multi-section flow.
 - Confirmed UI preferences include a smaller header, collapsed how-to, collapsed preview, hiding the output box until Generate is clicked (making it expandable), and keeping the desktop layout separate and wider.
-- Constrain the mobile selector columns to be much narrower, roughly about half their current width.
+- Constrain the mobile selector columns to be much narrower, roughly about half their current width. Additionally, implement a dedicated mobile-specific selector layout using two rows on phones to enhance the phone experience.

@@ -180,6 +180,27 @@
     gap: 0.85rem;
 }
 
+.mobile-picker-layout {
+    display: none;
+}
+
+.mobile-picker-row {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.mobile-picker-row + .mobile-picker-row {
+    margin-top: 0.65rem;
+}
+
+.mobile-selector-column {
+    min-width: 0;
+}
+
+.mobile-selector-list {
+    max-height: 5.2rem;
+}
+
 .selector-column h2 {
     margin: 0 0 0.55rem;
     font-size: 0.8rem;
@@ -345,6 +366,10 @@
         display: block;
     }
 
+    .mobile-picker-layout {
+        display: block;
+    }
+
     .hero-row {
         gap: 0.55rem;
     }
@@ -362,7 +387,7 @@
     }
 
     .version-badge {
-        width: 100%;
+        width: 50%;
         text-align: center;
     }
 
@@ -370,18 +395,28 @@
         gap: 0.35rem;
     }
 
-    .selector-grid {
-        grid-template-columns: repeat(2, minmax(0, 8.25rem));
-        justify-content: center;
-        gap: 0.5rem 0.65rem;
+    .mobile-picker-row-top {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .selector-column {
-        width: 8.25rem;
+    .mobile-picker-row-bottom {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .selector-list {
-        max-height: 7rem;
+    .mobile-selector-column h2 {
+        margin-bottom: 0.35rem;
+        font-size: 0.75rem;
+    }
+
+    .mobile-selector-list {
+        max-height: 5.1rem;
+    }
+
+    .mobile-selector-list .selector-button {
+        min-height: 1.8rem;
+        border-radius: 0.55rem;
+        font-size: 0.72rem;
+        padding: 0 0.2rem;
     }
 
     .button-row-split {
@@ -394,7 +429,7 @@
     }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 601px) {
     .home-card {
         padding: 1rem;
     }
@@ -407,5 +442,9 @@
 @media (min-width: 601px) {
     .desktop-only {
         display: block;
+    }
+
+    .mobile-picker-layout {
+        display: none;
     }
 }
