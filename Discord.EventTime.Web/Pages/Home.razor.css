@@ -371,7 +371,13 @@
     }
 
     .selector-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 8.25rem));
+        justify-content: center;
+        gap: 0.5rem 0.65rem;
+    }
+
+    .selector-column {
+        width: 8.25rem;
     }
 
     .selector-list {
