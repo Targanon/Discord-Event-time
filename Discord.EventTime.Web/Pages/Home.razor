@@ -76,76 +76,78 @@
             <button class="text-button" type="button" @onclick="ResetToNow">Use now</button>
         </div>
 
-        <div class="selector-grid desktop-only">
-            <section class="selector-column" aria-label="Year selector">
-                <h2>Year</h2>
-                <div class="selector-list">
-                    @foreach (var year in yearOptions)
-                    {
-                        <button type="button"
-                                class="@GetSelectorButtonClass(selectedYear == year)"
-                                @onclick="() => SelectYear(year)">
-                            @year
-                        </button>
-                    }
-                </div>
-            </section>
+        <div class="desktop-only">
+            <div class="selector-grid">
+                <section class="selector-column" aria-label="Year selector">
+                    <h2>Year</h2>
+                    <div class="selector-list">
+                        @foreach (var year in yearOptions)
+                        {
+                            <button type="button"
+                                    class="@GetSelectorButtonClass(selectedYear == year)"
+                                    @onclick="() => SelectYear(year)">
+                                @year
+                            </button>
+                        }
+                    </div>
+                </section>
 
-            <section class="selector-column" aria-label="Month selector">
-                <h2>Month</h2>
-                <div class="selector-list">
-                    @foreach (var month in monthOptions)
-                    {
-                        <button type="button"
-                                class="@GetSelectorButtonClass(selectedMonth == month)"
-                                @onclick="() => SelectMonth(month)">
-                            @CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(month)
-                        </button>
-                    }
-                </div>
-            </section>
+                <section class="selector-column" aria-label="Month selector">
+                    <h2>Month</h2>
+                    <div class="selector-list">
+                        @foreach (var month in monthOptions)
+                        {
+                            <button type="button"
+                                    class="@GetSelectorButtonClass(selectedMonth == month)"
+                                    @onclick="() => SelectMonth(month)">
+                                @CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(month)
+                            </button>
+                        }
+                    </div>
+                </section>
 
-            <section class="selector-column" aria-label="Day selector">
-                <h2>Day</h2>
-                <div class="selector-list">
-                    @foreach (var day in dayOptions)
-                    {
-                        <button type="button"
-                                class="@GetSelectorButtonClass(selectedDay == day)"
-                                @onclick="() => SelectDay(day)">
-                            @day.ToString(CultureInfo.InvariantCulture)
-                        </button>
-                    }
-                </div>
-            </section>
+                <section class="selector-column" aria-label="Day selector">
+                    <h2>Day</h2>
+                    <div class="selector-list">
+                        @foreach (var day in dayOptions)
+                        {
+                            <button type="button"
+                                    class="@GetSelectorButtonClass(selectedDay == day)"
+                                    @onclick="() => SelectDay(day)">
+                                @day.ToString(CultureInfo.InvariantCulture)
+                            </button>
+                        }
+                    </div>
+                </section>
 
-            <section class="selector-column" aria-label="Hour selector">
-                <h2>Hour</h2>
-                <div class="selector-list">
-                    @foreach (var hour in hourOptions)
-                    {
-                        <button type="button"
-                                class="@GetSelectorButtonClass(selectedHour == hour)"
-                                @onclick="() => SelectHour(hour)">
-                            @hour.ToString("00", CultureInfo.InvariantCulture)
-                        </button>
-                    }
-                </div>
-            </section>
+                <section class="selector-column" aria-label="Hour selector">
+                    <h2>Hour</h2>
+                    <div class="selector-list">
+                        @foreach (var hour in hourOptions)
+                        {
+                            <button type="button"
+                                    class="@GetSelectorButtonClass(selectedHour == hour)"
+                                    @onclick="() => SelectHour(hour)">
+                                @hour.ToString("00", CultureInfo.InvariantCulture)
+                            </button>
+                        }
+                    </div>
+                </section>
 
-            <section class="selector-column" aria-label="Minute selector">
-                <h2>Minute</h2>
-                <div class="selector-list">
-                    @foreach (var minute in minuteOptions)
-                    {
-                        <button type="button"
-                                class="@GetSelectorButtonClass(selectedMinute == minute)"
-                                @onclick="() => SelectMinute(minute)">
-                            @minute.ToString("00", CultureInfo.InvariantCulture)
-                        </button>
-                    }
-                </div>
-            </section>
+                <section class="selector-column" aria-label="Minute selector">
+                    <h2>Minute</h2>
+                    <div class="selector-list">
+                        @foreach (var minute in minuteOptions)
+                        {
+                            <button type="button"
+                                    class="@GetSelectorButtonClass(selectedMinute == minute)"
+                                    @onclick="() => SelectMinute(minute)">
+                                @minute.ToString("00", CultureInfo.InvariantCulture)
+                            </button>
+                        }
+                    </div>
+                </section>
+            </div>
         </div>
 
         <div class="mobile-only mobile-picker-layout">
